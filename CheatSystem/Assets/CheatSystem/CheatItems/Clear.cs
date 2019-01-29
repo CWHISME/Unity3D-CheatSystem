@@ -9,10 +9,9 @@ namespace MC.CheatNs
     public class Clear : CheatItem
     {
 
-        public void SingleMethod()
+        public void DefaultSingleMethod()
         {
             UICheatSystem.GetInstance.ClearText();
         }
-
     }
 }

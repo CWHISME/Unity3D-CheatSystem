@@ -33,110 +33,146 @@ namespace MC.CheatNs
         [SerializeField]
         private Text _tipsText;
         [SerializeField]
+        private Text _pageTipsText;
+        [SerializeField]
         private UI.UIScrollViewText _contentText;
         [SerializeField]
         private InputField _input;
 
-        private List<string> _commandTenpList = new List<string>();
+        /// <summary>
+        /// 所有输入命令的历史记录
+        /// </summary>
+        private List<string> _commandTempList = new List<string>();
+        /// <summary>
+        /// 历史记录下标
+        /// </summary>
+        private int _historyCmdIndex = -1;
+
 
         void Start()
         {
             RefreshTips();
-            _contentText.text = "";
+            _contentText.Clear();
+            //页码信息
+            _contentText.OnPageChange = OnPageChange;
+            OnPageChange(1, 1);
 
             CheatSystemManager.GetInstance.OnTargetChange += () => { RefreshTips(); };
-
-            _input.onEndEdit.AddListener((command) =>
-            {
-                //if (!_return) return;
-                if (string.IsNullOrEmpty(command)) return;
-
-                if (_commandTenpList.Count < 1 || command != _commandTenpList[_commandTenpList.Count - 1])
-                {
-                    _commandTenpList.Add(command);
-                    //仅记录三十条
-                    if (_commandTenpList.Count > 30)
-                        _commandTenpList.RemoveAt(0);
-                }
-
-                _historyCmdIndex = _commandTenpList.Count - 1;
-
-                string res = CheatSystemManager.GetInstance.RunCommand(command);
-                //若是密码，这儿的回显也处理一下
-                if (_input.contentType == InputField.ContentType.Password)
-                    command = new string('*', command.Length);
-                if (!string.IsNullOrEmpty(res))
-                    _contentText.text = _contentText.text + "\n->" + command + "\n->" + res;
-
-                //while (_contentText.preferredHeight > _contentText.rectTransform.sizeDelta.y)
-                //{
-                //    _contentText.text = _contentText.text.Remove(0, _contentText.text.Length > 10 ? 10 : _contentText.text.Length);
-                //}
-
-                _input.ActivateInputField();
-
-                //_return = false;
-            });
+            _input.onEndEdit.AddListener(OnEndEdit);
         }
 
-        //private bool _return = false;
-        private int _historyCmdIndex = -1;
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                if (_commandTenpList.Count < 1) return;
+                if (_commandTempList.Count < 1) return;
 
                 _historyCmdIndex--;
                 if (_historyCmdIndex < 0)
                     _historyCmdIndex = 0;
-                _input.text = _commandTenpList[_historyCmdIndex];
+                _input.text = _commandTempList[_historyCmdIndex];
+                _input.caretPosition = _input.text.Length;
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                if (_commandTenpList.Count < 1) return;
+                if (_commandTempList.Count < 1) return;
                 _historyCmdIndex++;
-                if (_historyCmdIndex >= _commandTenpList.Count)
-                    _historyCmdIndex = _commandTenpList.Count - 1;
-                _input.text = _commandTenpList[_historyCmdIndex];
+                if (_historyCmdIndex >= _commandTempList.Count)
+                    _historyCmdIndex = _commandTempList.Count - 1;
+                _input.text = _commandTempList[_historyCmdIndex];
+                _input.caretPosition = _input.text.Length;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (string.IsNullOrEmpty(_input.text)) return;
+                _input.text = CheatSystemManager.GetInstance.GetAutoCompltion(_input.text) + " ";
+                _input.caretPosition = _input.text.Length;
             }
 
             if (Input.GetMouseButtonDown(0))
                 CheatSystemManager.GetInstance.RayCheckTarget();
-            //if (Input.GetKeyDown(KeyCode.Return))
-            //    _return = true;
         }
 
         public void Active()
         {
-            CheatSystemManager.GetInstance.ResetTarget();
+            //CheatSystemManager.GetInstance.ResetTarget();
             RefreshTips();
-            _input.text = "";
-            _input.ActivateInputField();
             gameObject.SetActive(!gameObject.activeSelf);
-
+            FocusClearInputField();
         }
 
         public void RefreshTips()
         {
-            _targetText.text = "当前目标：" + (CheatSystemManager.GetInstance.Target == null ? "无" : CheatSystemManager.GetInstance.Target.Name);
+            _targetText.text = ConstLanguage.Get(ConstLanguage.TargetInfo, GetCurrentTargetName());
             _tipsText.text = CheatSystemManager.GetInstance.GetCheatCommandTips();
         }
 
         public void ClearText()
         {
-            _contentText.text = "";
+            _contentText.Clear();
         }
 
-        public string GetText()
+        public string GetText(bool justCurrentTxet = true)
         {
-            return _contentText.text;
+            return justCurrentTxet ? _contentText.text : _contentText.TotalText;
         }
 
         public void Passward(bool p)
         {
             _input.contentType = p ? InputField.ContentType.Password : InputField.ContentType.Standard;
+        }
+
+        /// <summary>
+        /// 当前目标名字
+        /// </summary>
+        /// <returns></returns>
+        private string GetCurrentTargetName()
+        {
+            return CheatSystemManager.GetInstance.Target == null ? "Null" : CheatSystemManager.GetInstance.Target.Name;
+        }
+
+        private void OnPageChange(int index, int allPage)
+        {
+            _pageTipsText.text = string.Format("({0}/{1})", index, allPage);
+        }
+
+        private void OnEndEdit(string command)
+        {
+            if (string.IsNullOrEmpty(command))
+            {
+                _input.ActivateInputField();
+                return;
+            }
+
+            if (_commandTempList.Count < 1 || command != _commandTempList[_commandTempList.Count - 1])
+            {
+                _commandTempList.Add(command);
+                //仅记录三十条
+                if (_commandTempList.Count > 30)
+                    _commandTempList.RemoveAt(0);
+            }
+
+            _historyCmdIndex = _commandTempList.Count;
+
+            string res = CheatSystemManager.GetInstance.RunCommand(command);
+            //若是密码，这儿的回显也处理一下
+            if (_input.contentType == InputField.ContentType.Password)
+                command = new string('*', command.Length);
+            if (!string.IsNullOrEmpty(res))
+                _contentText.AddLine(string.Format("->{0}\n->{1}", command, res));
+
+            FocusClearInputField();
+        }
+
+        /// <summary>
+        /// 清除输入数据，并激活输入框
+        /// </summary>
+        private void FocusClearInputField()
+        {
+            _input.text = "";
+            _input.ActivateInputField();
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)

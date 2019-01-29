@@ -4,19 +4,19 @@
 
 namespace MC.CheatNs
 {
-    [CommandInfo("权限命令，主要用于控制台权限变更等")]
+    [CommandInfo("权限命令，主要用于控制台权限变更等  +密码 获取权限")]
     public class Root : CheatItem
     {
-        [CommandInfo("获取权限")]
-        public string Get(object passward)
+
+        public string DefaultOneParamsMethod(string passward)
         {
             int max = (int)EnumRootLevel.Max;
             for (int i = max; i > 0; i--)
             {
-                Passward p = CheatSystemManager.GetInstance.GetRootLevelDetail((EnumRootLevel)i);
+                Passward p = CheatSystemManager.GetRootLevelDetail((EnumRootLevel)i);
                 if (p != null)
                 {
-                    if (p.CheckPassward(passward.ToString()))
+                    if (p.CheckPassward(passward))
                     {
                         CheatSystemManager.GetInstance.CurrenLevel = (EnumRootLevel)i;
                         UICheatSystem.GetInstance.RefreshTips();
