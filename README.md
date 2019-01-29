@@ -55,5 +55,15 @@ public string ExportText()
 所有权限及密码位于EnumRootLevel类中，作为枚举存在，枚举之上放置Passward属性即可。
 同时，密码在此保存为MD5格式，新增或修改密码也注意，必须先转化为MD5格式再粘贴过来。
 
+### 代码使用
+
+直接代码使用也是可以的，如果愿意，可以将功能写入CheatSystem中，执行RunCommand运行命令。
+如：
+``` cs
+string rerult = CheatSystemManager.GetInstance.RunCommand(command);
+Debug.Log(rerult);
+```
+这样的好处是，灵活，通过外部配置之类的控制部分功能执行。当然因为是反射，性能肯定会有那么点损失的。
+
 ### 注
 Class不一定需要放在CheatItems文件夹下，只要类继承了CheatItem即可。
