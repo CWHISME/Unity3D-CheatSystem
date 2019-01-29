@@ -37,9 +37,10 @@ CommandInfo(string name, string str, EnumRootLevel level = EnumRootLevel.Player)
 若方法有默认参数，使用时可不传对应默认参数。
 方法的返回值若不为void，则该返回值会用于控制台命令执行完毕后，显示为提示信息。
 
-`DefaultSingleMethod`作用：
-无参数默认方法，直接使用类名运行的功能，如Clear功能，因为实现了DefaultSingleMethod，因此可以直接通过类名调用。
-`DefaultOneParamsMethod`作用：
+两个默认方法作用：
+`DefaultSingleMethod`：
+无参数默认方法，若继承于CheatItem的类中具有该方法，直接输入类名，即会调用。如Clear或者Root功能，因为实现了DefaultSingleMethod，因此可以直接通过类名调用器功能。
+`DefaultOneParamsMethod`：
 作用与DefaultSingleMethod相同，但是可以接收一个参数。
 
 如：
