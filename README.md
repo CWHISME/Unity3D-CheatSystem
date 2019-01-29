@@ -51,7 +51,9 @@ public string ExportText()
     return ExportTextWithPath(Application.dataPath + "/../ExportConsole.txt");
 }
 ```
-
+### 增加权限或修改密码
+所有权限及密码位于EnumRootLevel类中，作为枚举存在，枚举之上放置Passward属性即可。
+同时，密码在此保存为MD5格式，新增或修改密码也注意，必须先转化为MD5格式再粘贴过来。
 
 ### 注
 Class不一定需要放在CheatItems文件夹下，只要类继承了CheatItem即可。
