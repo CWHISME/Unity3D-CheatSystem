@@ -16,7 +16,7 @@
 ### 增加新命令
 继承于CheatItem即可
 如：
-```
+``` cs
 [CommandInfo("导出")]
 public class Export : CheatItem
 {
@@ -39,11 +39,11 @@ CommandInfo(string name, string str, EnumRootLevel level = EnumRootLevel.Player)
 
 `DefaultSingleMethod`作用：
 无参数默认方法，直接使用类名运行的功能，如Clear功能，因为实现了DefaultSingleMethod，因此可以直接通过类名调用。
-`DefaultOneParamsMethod`：
+`DefaultOneParamsMethod`作用：
 作用与DefaultSingleMethod相同，但是可以接收一个参数。
 
 如：
-```
+``` cs
 [CommandInfo("导出当前控制台文本（默认路径）")]
 public string ExportText()
 {
