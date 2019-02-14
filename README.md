@@ -13,6 +13,16 @@
 输入Help可查看相关帮助。
 按下Tab键进行自动补全，键盘方向键可进行历史命令的快捷输入。
 
+* 翻页功能
+由于整个系统显示仅使用一个Text，Text所支持的文本显示具有上限（虽然很大，但是一直添加也会到头），因此特别增加了翻页功能。
+在UIScrollViewText中，可设置_supportTextLineSize大小，代表每一页所具有的行数，超出该设置行数会自动进行分页。
+右下角可查看当前所用总页面及当前所在页面，上下拖动至Scroll终点，自动切换页面。
+在Prefab上的行数设置为：
+```
+[CheatSystem]->Background->Content->ScrollViewText->SupportTextLineSize
+```
+（注：该行数不计算非“\r\n”分割值，即直接“\n”分割的行数不算进去。若需要命令返回字符串不计入统计，参看命令Tools->SystemInfo处理。）
+
 ### 增加新命令
 继承于CheatItem即可
 如：

@@ -22,8 +22,8 @@ namespace MC.UI
         [SerializeField]
         private RectTransform _scrollContentRect;
         [SerializeField]
-        //最大支持多少字数，超出字数，显示的时候会自动删除之前的内容（当然也可以用TotalText获取所有的文本）
-        private int _supportTextSize = 1000;
+        //最大支持多少行，超出行数会自动分页，上下拖动至终点，自动切换页面
+        private int _supportTextLineSize = 50;
         [SerializeField]
         //是否允许翻页
         private bool _allowPage = true;
@@ -101,7 +101,7 @@ namespace MC.UI
         /// </summary>
         public void PagePlus()
         {
-            int page = Mathf.Clamp(_pageIndex + 1, 0, _strBuilder.Length / _supportTextSize);
+            int page = Mathf.Clamp(_pageIndex + 1, 0, _pageCount);
             if (page == _pageIndex) return;
             RefreshDisplayText(page);
         }
@@ -114,12 +114,14 @@ namespace MC.UI
             int page = Mathf.Clamp(_pageIndex - 1, 0, _pageIndex);
             if (page == _pageIndex) return;
             RefreshDisplayText(page);
+            JumpContentToStart();
         }
 
         public void Clear()
         {
             _strBuilder = new StringBuilder();
-            _content.text = "";
+            text = "";
+            RefreshDisplayText();
         }
 
         /// <summary>
@@ -127,35 +129,45 @@ namespace MC.UI
         /// </summary>
         private void RefreshDisplayText(int pageIndex = 0)
         {
-            int pageCount = _strBuilder.Length / _supportTextSize;
+            //分页处理
+            string[] contentArray = _strBuilder.ToString().Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            int pageCount = contentArray.Length / _supportTextLineSize;
             if (pageIndex <= pageCount)
             {
-                bool contentMoreThanSize = _strBuilder.Length > _supportTextSize;
-                int totalLength = _strBuilder.Length;
+                bool contentMoreThanSize = contentArray.Length > _supportTextLineSize;
+                int totalLength = contentArray.Length;
                 int startIndex, length;
-                startIndex = contentMoreThanSize ? totalLength - _supportTextSize * (pageIndex + 1) : 0;
-                length = contentMoreThanSize ? _supportTextSize : _strBuilder.Length;
+                startIndex = contentMoreThanSize ? totalLength - _supportTextLineSize * (pageIndex + 1) : 0;
+                length = contentMoreThanSize ? _supportTextLineSize : contentArray.Length;
                 if (startIndex < 0)
                 {
                     //length = _supportTextSize + startIndex;
                     startIndex = 0;
                 }
-
                 if ((_pageIndex != pageIndex || _pageCount != pageCount) && OnPageChange != null)
                     OnPageChange.Invoke(pageIndex + 1, pageCount + 1);
                 _pageIndex = pageIndex;
                 _pageCount = pageCount;
                 //处理字体颜色问题
-                string txt = _strBuilder.ToString(startIndex, length);
-                txt = TrimColor(txt, _pageIndex > 0);
-                text = txt;
+                //当前已经修改为行数判断，这个暂且就没用了
+                //string txt = _strBuilder.ToString(startIndex, length);
+                //txt = TrimColor(txt, _pageIndex > 0);
+
+                string[] displayArray = new string[length];
+                Array.Copy(contentArray, startIndex, displayArray, 0, length);
+                text = string.Join("\r\n", displayArray);
             }
             else
             {
                 AddLine("System Error！");
             }
+
+            _scrollRect.StopMovement();
         }
 
+        /// <summary>
+        /// 处理字体颜色问题，避免截取到Color，将其分割
+        /// </summary>
         private string TrimColor(string txt, bool trimEnd = false)
         {
             int colorStartIndex = txt.IndexOf("<color=");
@@ -204,13 +216,21 @@ namespace MC.UI
             _scrollContentRect.anchoredPosition = new Vector2(0, Mathf.Clamp(_scrollContentRect.sizeDelta.y - _rectTranform.sizeDelta.y, 0, int.MaxValue));
         }
 
+        /// <summary>
+        /// 内容跳转至最开始
+        /// </summary>
+        private void JumpContentToStart()
+        {
+            _scrollContentRect.anchoredPosition = Vector2.zero;
+        }
+
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
             if (_allowPage)
             {
-                if (_scrollRect.verticalNormalizedPosition > 1.05f)
+                if (_scrollRect.verticalNormalizedPosition > 1.03f)
                     PagePlus();
-                else if (_scrollRect.verticalNormalizedPosition < -0.05f)
+                else if (_scrollRect.verticalNormalizedPosition < -0.03f)
                     PageReduce();
             }
         }

@@ -16,7 +16,7 @@ namespace MC.CheatNs
         [CommandInfo("显示系统信息")]
         public string SystemInfo()
         {
-            StringBuilder builder = new StringBuilder("\n系统信息：");
+            StringBuilder builder = new StringBuilder("\n系统信息：\n");
 
             Type type = typeof(UnityEngine.SystemInfo);
             PropertyInfo[] infos = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
@@ -26,7 +26,7 @@ namespace MC.CheatNs
             }
 
             builder.AppendLine("报告生成时间：" + System.DateTime.Now.ToString());
-            return builder.ToString();
+            return builder.ToString().Replace('\r', ' ');
         }
 
         [CommandInfo("生成一张当前屏幕所有信息截图（如控制台、UI等都会算进去）")]

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheatSystem", "CheatSystem.csproj", "{E32FAED1-C313-CAFF-0DC3-FF6683EDA55E}"
 EndProject
 Global
