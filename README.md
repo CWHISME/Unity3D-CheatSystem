@@ -3,6 +3,8 @@
 
 ![](https://github.com/CWHISME/Unity3D-CheatSystem/raw/master/Image/Snipaste_2019-01-29_19-06-35.png)
 
+![](https://github.com/CWHISME/Unity3D-CheatSystem/raw/master/Image/Snipaste_2019-02-14_17-02-48.png)
+
 ## 使用
 
 ### 打开
@@ -14,6 +16,7 @@
 按下Tab键进行自动补全，键盘方向键可进行历史命令的快捷输入。
 
 * 翻页功能
+
 由于整个系统显示仅使用一个Text，Text所支持的文本显示具有上限（虽然很大，但是一直添加也会到头），因此特别增加了翻页功能。
 在UIScrollViewText中，可设置_supportTextLineSize大小，代表每一页所具有的行数，超出该设置行数会自动进行分页。
 右下角可查看当前所用总页面及当前所在页面，上下拖动至Scroll终点，自动切换页面。
@@ -35,10 +38,14 @@ public class Export : CheatItem
 ```
 
 CommandInfo用于命令的显示提示文本，分为两者：
+
 * 1
+
 CommandInfo(string str, EnumRootLevel level = EnumRootLevel.Player)
 其中第二位为使用者权限，默认权限为“玩家”，即所有打开控制台者皆可使用。
+
 * 2
+
 CommandInfo(string name, string str, EnumRootLevel level = EnumRootLevel.Player)
 第一位为名字，后续参数与第一项相同，若采用该重载，名字会使用这里赋值的。
 否则名字显示为方法本身名字(针对于SingleMethod方法，SingleMethod作用后续解释)。
