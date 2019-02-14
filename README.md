@@ -3,8 +3,6 @@
 
 ![](https://github.com/CWHISME/Unity3D-CheatSystem/raw/master/Image/Snipaste_2019-01-29_19-06-35.png)
 
-![](https://github.com/CWHISME/Unity3D-CheatSystem/raw/master/Image/Snipaste_2019-02-14_17-02-48.png)
-
 ## 使用
 
 ### 打开
