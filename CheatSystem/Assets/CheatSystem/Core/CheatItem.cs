@@ -12,21 +12,43 @@ namespace MC.CheatNs
     public class CheatItem
     {
 
-        private List<string> _commandList;
-        private string _commandDescList;
+        private Dictionary<EnumRootLevel, List<string>> _commandList = new Dictionary<EnumRootLevel, List<string>>();
+        private Dictionary<EnumRootLevel, string> _commandDescList = new Dictionary<EnumRootLevel, string>();
 
-        public CheatItem()
+        /// <summary>
+        /// 该模块所有可执行方法及其描述(帮助)
+        /// </summary>
+        /// <returns></returns>
+        public string GetCommandDescList()
         {
-            _commandList = new List<string>();
+            if (!_commandDescList.ContainsKey(CheatSystemManager.GetInstance.CurrenLevel))
+                CalcCommand(CheatSystemManager.GetInstance.CurrenLevel);
+            return _commandDescList[CheatSystemManager.GetInstance.CurrenLevel];
+        }
+
+        /// <summary>
+        /// 该模块所有可执行方法名
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetCommandNameList()
+        {
+            if (!_commandList.ContainsKey(CheatSystemManager.GetInstance.CurrenLevel))
+                CalcCommand(CheatSystemManager.GetInstance.CurrenLevel);
+            return _commandList[CheatSystemManager.GetInstance.CurrenLevel];
+        }
+
+        private void CalcCommand(EnumRootLevel lv)
+        {
+            List<string> commandList = new List<string>();
             StringBuilder builder = new StringBuilder();
             MethodInfo[] mths = this.GetType().GetMethods();
             for (int i = 0; i < mths.Length; i++)
             {
                 CommandInfo exp = (CommandInfo)System.Attribute.GetCustomAttribute(mths[i], typeof(CommandInfo));
-                if (exp != null)
+                if (exp != null && exp.RootLevel <= lv)
                 {
-                    _commandList.Add(mths[i].Name);
-                    builder.Append("[" + exp.RequireLevelName + "]");
+                    commandList.Add(mths[i].Name);
+                    //builder.Append("[" + exp.RequireLevelName + "]");
                     builder.Append(string.Format(ConstLanguage.CommandName, mths[i].Name));
                     builder.Append("(");
                     ParameterInfo[] paramsInfo = mths[i].GetParameters();
@@ -47,25 +69,8 @@ namespace MC.CheatNs
                     builder.AppendLine(exp.Explain);
                 }
             }
-            _commandDescList = builder.ToString();
-        }
-
-        /// <summary>
-        /// 该模块所有可执行方法及其描述(帮助)
-        /// </summary>
-        /// <returns></returns>
-        public string GetCommandDescList()
-        {
-            return _commandDescList;
-        }
-
-        /// <summary>
-        /// 该模块所有可执行方法名
-        /// </summary>
-        /// <returns></returns>
-        public List<string> GetCommandNameList()
-        {
-            return _commandList;
+            _commandList[lv] = commandList;
+            _commandDescList[lv] = builder.ToString();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace MC.CheatNs
         [SerializeField]
         private Text _pageTipsText;
         [SerializeField]
-        private UI.UIScrollViewText _contentText;
+        private UIScrollViewText _contentText;
         [SerializeField]
         private InputField _input;
 

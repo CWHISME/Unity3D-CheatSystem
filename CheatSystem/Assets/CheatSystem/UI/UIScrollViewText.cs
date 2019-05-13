@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace MC.UI
+namespace MC.CheatNs
 {
     /// <summary>
     /// 仅用于Text的ScrollView 扩展

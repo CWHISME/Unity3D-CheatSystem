@@ -195,6 +195,7 @@ namespace MC.CheatNs
             for (int i = 0; i < _cheatItems.Count; i++)
             {
                 CommandInfo expl = (CommandInfo)System.Attribute.GetCustomAttribute(_cheatItems[i].GetType(), typeof(CommandInfo));
+                if (!expl.CanExecute) continue;
                 com += ConstLanguage.Get(ConstLanguage.CommandName, _cheatItems[i].GetType().Name);
                 if (expl != null)
                     com += ": " + expl.Explain + "\n";

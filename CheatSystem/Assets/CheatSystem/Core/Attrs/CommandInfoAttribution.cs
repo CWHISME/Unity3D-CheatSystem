@@ -15,6 +15,7 @@ namespace MC.CheatNs
         public string Explain { get { return _exp; } }
 
         private EnumRootLevel _rootLevel;
+        public EnumRootLevel RootLevel { get { return _rootLevel; } }
 
         /// <summary>
         /// 判断运行权限是否足够
