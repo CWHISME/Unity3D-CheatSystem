@@ -17,5 +17,13 @@ namespace MC.CheatNs
             }
         }
 
+#if !UNITY_EDITOR
+        private void OnGUI()
+        {
+            if (GUILayout.Button("Console"))
+                UICheatSystem.GetInstance.Active();
+        }
+#endif
+
     }
 }

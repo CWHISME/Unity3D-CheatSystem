@@ -13,14 +13,12 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectGenerator>VSTU</UnityProjectGenerator>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.6.7f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -83,7 +81,6 @@
   <ItemGroup>
     <Compile Include="Assets\CheatSystem\CheatItems\Clear.cs" />
     <Compile Include="Assets\CheatSystem\CheatItems\Export.cs" />
-    <Compile Include="Assets\CheatSystem\CheatItems\BBBB.cs" />
     <Compile Include="Assets\CheatSystem\CheatItems\Help.cs" />
     <Compile Include="Assets\CheatSystem\CheatItems\Root.cs" />
     <Compile Include="Assets\CheatSystem\CheatItems\Tools.cs" />

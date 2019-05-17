@@ -54,11 +54,11 @@ namespace MC.CheatNs
                     ParameterInfo[] paramsInfo = mths[i].GetParameters();
                     foreach (var item in paramsInfo)
                     {
-                        builder.Append(item.ParameterType + " " + item.Name);
+                        builder.Append(string.Format(ConstLanguage.CommandParams, item.ParameterType.Name) + " " + item.Name);
                         if (!string.IsNullOrEmpty(item.DefaultValue.ToString()))
                         {
                             builder.Append("=");
-                            builder.Append(item.DefaultValue.ToString());
+                            builder.Append(string.Format(ConstLanguage.CommandName, item.DefaultValue));
                         }
                         builder.Append(",");
                     }

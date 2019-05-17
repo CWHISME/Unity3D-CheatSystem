@@ -14,6 +14,7 @@ namespace MC.CheatNs
         public const string CommandTips = "当前权限：{0}";
         public const string CommandResult = "<color=#FFFF00FF>执行结果：Success！</color>\n{0}";
         public const string CommandHelp = "帮助：你可以从以下命令中选择执行，命令格式按照 指令->方法与参数顺序进行.\n{0}";
+        public const string CommandParams = "<color=#FF8E00FF>{0}</color>";
 
         public const string ErrorCommand = "<color=#FF00FF>错误：{0}</color>";
         public const string ErrorNullCommand = "<color=#FF00FF>错误：命令为空！</color>";
